@@ -7,7 +7,8 @@
 <div class="card">
     <div class="row my-3">
         <div class="col-md-4">
-            <img src="<%= campground.images[0].url %>" alt="" class="img-fluid">
+            <img class="img-fluid" alt="" src=
+            "<%= campground.images.length ? campground.images[0].url : 'https://res.cloudinary.com/dr0nzbfe1/image/upload/v1614039506/YelpCamp/tent_su6sqr.jpg'%>">
         </div>
         <div class="col-md-8">
             <div class="card-body">

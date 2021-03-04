@@ -1,6 +1,11 @@
 <% layout('layouts/boilerplate') %>
 <link rel="stylesheet" href="/stylesheets/stars.css">
 
+<script>
+    const mapToken = '<%- process.env.MAPBOX_TOKEN %>';
+    const campground = <%- JSON.stringify(campground) %>;
+</script>
+
 <div class="row">
     <div class="col-6">
         <div id="campgroundCarousel" class="carousel carousel-dark slide" data-bs-ride="carousel">
@@ -47,6 +52,7 @@
         </div>
     </div>
     <div class="col-6">
+        <div class="mb-3" id='map' style='width: auto; height: 400px;'></div>
         <% if(currentUser) { %> 
         <div class="mb-2">
             <h2>Leave a Review</h2>
@@ -96,3 +102,6 @@
         <% } %>
     </div>
 </div>
+
+
+<script src="/javascript/showPageMap.js"></script>
