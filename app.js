@@ -2,9 +2,9 @@ if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
 
+require("./mongo");
 const express = require("express");
 const path = require("path");
-const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const flash = require("connect-flash");
@@ -20,18 +20,18 @@ const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
 const userRoutes = require("./routes/users");
 
-mongoose.connect("mongodb://localhost:27017/yelp-camp", {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-});
+// mongoose.connect("mongodb://localhost:27017/yelp-camp", {
+//     useNewUrlParser: true,
+//     useCreateIndex: true,
+//     useUnifiedTopology: true,
+//     useFindAndModify: false,
+// });
 
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", () => {
-    console.log("Database connected");
-});
+// const db = mongoose.connection;
+// db.on("error", console.error.bind(console, "connection error:"));
+// db.once("open", () => {
+//     console.log("Database connected");
+// });
 
 const app = express();
 
@@ -131,6 +131,7 @@ app.use((err, req, res, next) => {
     const { status = 500 } = err;
     if (!err.message) err.message = "Oh boy! Something went wrong!";
     res.status(status).render("error", { err });
+    next();
 });
 
 app.listen(3000, () => {
