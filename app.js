@@ -20,19 +20,6 @@ const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
 const userRoutes = require("./routes/users");
 
-// mongoose.connect("mongodb://localhost:27017/yelp-camp", {
-//     useNewUrlParser: true,
-//     useCreateIndex: true,
-//     useUnifiedTopology: true,
-//     useFindAndModify: false,
-// });
-
-// const db = mongoose.connection;
-// db.on("error", console.error.bind(console, "connection error:"));
-// db.once("open", () => {
-//     console.log("Database connected");
-// });
-
 const app = express();
 
 app.engine("ejs", ejsMate);
@@ -74,12 +61,7 @@ const styleSrcUrls = [
     "https://fonts.googleapis.com/",
     "https://use.fontawesome.com/",
 ];
-const connectSrcUrls = [
-    "https://api.mapbox.com/",
-    "https://a.tiles.mapbox.com/",
-    "https://b.tiles.mapbox.com/",
-    "https://events.mapbox.com/",
-];
+const connectSrcUrls = ["https://api.mapbox.com/", "https://a.tiles.mapbox.com/", "https://b.tiles.mapbox.com/", "https://events.mapbox.com/"];
 const fontSrcUrls = [];
 app.use(
     helmet.contentSecurityPolicy({
@@ -108,8 +90,7 @@ passport.serializeUser(User.serializeUser()); // passport-local-mongoose -> Stor
 passport.deserializeUser(User.deserializeUser()); // passport-local-mongoose -> Unstore of session
 
 app.use((req, res, next) => {
-    if (req.originalUrl.includes("/campgrounds"))
-        req.session.returnTo = req.originalUrl;
+    if (req.originalUrl.includes("/campgrounds")) req.session.returnTo = req.originalUrl;
     res.locals.currentUser = req.user;
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
