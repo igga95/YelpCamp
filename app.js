@@ -15,6 +15,7 @@ const LocalStrategy = require("passport-local");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 const User = require("./models/user");
+const MongoStore = require("connect-mongo");
 
 const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
@@ -31,9 +32,25 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize());
 
+const { MONGO_DB_URI, MONGO_DB_URI_TEST, NODE_ENV } = process.env;
+const connectURI = NODE_ENV === "test" ? MONGO_DB_URI_TEST : MONGO_DB_URI;
+
+const sessionSecret = process.env.SECRET;
+const store = MongoStore.create({
+    mongoUrl: connectURI,
+    crypto: {
+        secret: sessionSecret,
+    },
+    touchAfter: 60 * 60 * 24,
+});
+store.on("error", function (e) {
+    console.log("SESSION STORE ERROR", e);
+});
+
 const sessionConfig = {
+    store,
     name: "session",
-    secret: "thisshouldbeabettersecret!",
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -43,8 +60,11 @@ const sessionConfig = {
         maxAge: 1000 * 60 * 60 * 24 * 7,
     },
 };
+
 app.use(session(sessionConfig));
 app.use(flash());
+app.use(helmet());
+
 const scriptSrcUrls = [
     "https://stackpath.bootstrapcdn.com/",
     "https://api.tiles.mapbox.com/",
