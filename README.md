@@ -1,7 +1,3 @@
-# README.md
+# Colt Steel Web Development Udemy Course Gobal Project.
 
-Colt Steel Web Development Udemy Course Gobal Project.
-
-## Local Development
-
-//localhost:3000
+## SSR Proyect made with NodeJS, Mongoose, MongoDB, EJS.
